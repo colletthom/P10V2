@@ -1,5 +1,7 @@
 ﻿using back_Patient.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace back_Patient.Data
 {
