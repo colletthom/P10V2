@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  back_patient:
+    image: ${DOCKER_REGISTRY-}backpatient
+    build:
+      context: .
+      dockerfile: back_Patient/Dockerfile
