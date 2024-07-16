@@ -6,8 +6,10 @@
     <DockerPublishLocally>False</DockerPublishLocally>
     <ProjectGuid>bad8dd39-dade-49aa-9a0f-7e8b37afd14c</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>back_patient</DockerServiceName>
+    <DockerServiceName>apigateway</DockerServiceName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

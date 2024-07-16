@@ -2,6 +2,7 @@ using back_Patient.Data;
 using back_Patient.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 
@@ -38,3 +39,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

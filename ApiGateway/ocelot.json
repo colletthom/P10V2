@@ -1,0 +1,35 @@
+{
+  "Routes": [
+    //back_Patient
+    {
+      // "UpstreamPathTemplate": "/ApiGateway/patient/",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
+      "UpstreamPathTemplate": "/API/patient-back/", //chemin aval
+      "downstreamScheme": "http",
+      "DownstreamHostAndPorts": [ //chemin amont
+        {
+          "Host": "back_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/API/Patient/"
+    },
+    //Front Accueil
+    {
+      "UpstreamPathTemplate": "/",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+
+      "downstreamScheme": "http",
+      "DownstreamHostAndPorts": [ //chemin amont
+        {
+          "Host": "front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/" //chemin aval
+    }
+  ],
+  "GlobalConfiguration": {
+     "BaseUrl":  "https://ApiGateway:5011"  //port de l'Api Gateway
+  }
+}

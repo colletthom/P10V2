@@ -4,8 +4,13 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "back_patient": "StartDebugging"
-      }
+        "back_patient": "StartDebugging",
+        "front": "StartDebugging",
+        "apigateway": "StartDebugging"
+      },
+      // deux lignes du dessous à garder? Test
+    //  "composeLaunchAction": "LaunchBrowser",
+     // "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}"
     }
   }
 }
