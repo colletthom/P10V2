@@ -9,7 +9,7 @@ namespace Front.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        {
+        {/*
             try
             {
                 var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;                
@@ -22,7 +22,7 @@ namespace Front.Data
             {
                 Console.WriteLine(ex.Message);
             }
-            
+            */
         }
     }
 }

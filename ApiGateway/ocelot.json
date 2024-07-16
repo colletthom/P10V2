@@ -4,15 +4,15 @@
     {
       // "UpstreamPathTemplate": "/ApiGateway/patient/",
       "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
-      "UpstreamPathTemplate": "/API/patient-back/", //chemin aval
+      "UpstreamPathTemplate": "/API/patient-back/", //vu avec Mickael, çà fonctionne
       "downstreamScheme": "http",
-      "DownstreamHostAndPorts": [ //chemin amont
+      "DownstreamHostAndPorts": [
         {
           "Host": "back_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/API/Patient/"
+      "DownstreamPathTemplate": "/API/Patient/" //vu avec Mickael, çà fonctionne
     },
     //Front Accueil
     {
@@ -27,6 +27,20 @@
         }
       ],
       "DownstreamPathTemplate": "/" //chemin aval
+    },
+    //CSS Front
+    {
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+
+      "downstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 80
+        }
+      ],
+      "DownstreamPathTemplate": "/{everything}"
     }
   ],
   "GlobalConfiguration": {
