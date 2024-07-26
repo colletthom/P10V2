@@ -1,8 +1,14 @@
 volumes:
   db_data:
+networks:
+  mynetwork:
+    driver: bridge
 
 services:
   sqldata:
+    container_name: nsqldata
+    networks:
+      - mynetwork
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y 
@@ -14,15 +20,31 @@ services:
     restart: always
 
   back_patient:
+    container_name: nback_patient
+    networks:
+      - mynetwork
     depends_on:
       - sqldata
     image: ${DOCKER_REGISTRY-}backpatient
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8080:8080"
+      - "8081:8081"
     build:
       context: .
       dockerfile: back_Patient/Dockerfile
 
   apigateway:
+    container_name: napigateway
+    networks:
+      - mynetwork
     image: ${DOCKER_REGISTRY-}apigateway
+    depends_on:
+      - front
+      - back_patient 
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
@@ -34,6 +56,9 @@ services:
       - "5011:5011"
 
   front:
+    container_name: nfront
+    networks:
+      - mynetwork
     depends_on:
       - sqldata
     image: ${DOCKER_REGISTRY-}front

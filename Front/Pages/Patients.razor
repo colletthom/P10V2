@@ -1,0 +1,69 @@
+﻿@page "/patients"
+@inject HttpClient HttpClient
+@using System.Text.Json
+@using System.Net
+@using VModel
+
+<h3>Liste des patients</h3>
+
+@if (listePatients != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Date de Naissance</th>
+                <th>Genre</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in listePatients)
+            {
+                <tr>
+                    <td>@patient.Id</td>
+                    <td>@patient.Prenom</td>
+                    <td>@patient.Nom</td>
+                    <td>@patient.DateNaissance</td>
+                    <td>@patient.Genre</td>
+                    <td>@patient.AdressePostale</td>
+                    <td>@patient.Telephone</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><tr>Aucun patient trouvé.</tr>
+        @errorMessage
+    </p>
+}
+
+@code {
+    public  List<PatientVM>? listePatients;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://nback_patient:8081/API/Patient");  
+            //avec nback_patient j'ai désormais l'erreur "The SSL connection could not be established, see inner exception."    
+            
+            // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("/API/Patient");
+            // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://localhost:5011/API/patient-back/");
+            // https://localhost:5011/API/patient-back/ se transforme en https://back_patient:8081/API/Patient/ : pb à résoudre
+            //listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://localhost:8081/API/Patient");
+            //"Connection refused (localhost:8081)" "ca peut être n'importe quoi"
+        }
+        catch (HttpRequestException ex)
+        {
+           
+         errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message;
+        }
+    }  
+}

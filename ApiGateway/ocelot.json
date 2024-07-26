@@ -2,41 +2,26 @@
   "Routes": [
     //back_Patient
     {
-      // "UpstreamPathTemplate": "/ApiGateway/patient/",
       "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
-      "UpstreamPathTemplate": "/API/patient-back/", //vu avec Mickael, çà fonctionne
-      "downstreamScheme": "http",
+      "UpstreamPathTemplate": "/API/patient-back/", 
+      "downstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "back_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
-          "Port": 8080
+          "Host": "nback_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 8081
         }
       ],
-      "DownstreamPathTemplate": "/API/Patient/" //vu avec Mickael, çà fonctionne
+      "DownstreamPathTemplate": "/API/Patient/" 
     },
-    //Front Accueil
+    // Front
     {
-      "UpstreamPathTemplate": "/",
+      "UpstreamPathTemplate": "/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
       "downstreamScheme": "http",
-      "DownstreamHostAndPorts": [ //chemin amont
-        {
-          "Host": "front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
-          "Port": 80
-        }
-      ],
-      "DownstreamPathTemplate": "/" //chemin aval
-    },
-    //CSS Front
-    {
-      "UpstreamPathTemplate": "/{everything}",
-      "UpstreamHttpMethod": [ "Get" ],
-
-      "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nfront", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 80
         }
       ],
@@ -44,6 +29,7 @@
     }
   ],
   "GlobalConfiguration": {
-     "BaseUrl":  "https://ApiGateway:5011"  //port de l'Api Gateway
+     "BaseUrl": "https://ApiGateway:5011" //port de l'Api Gateway
+    // "BaseUrl": "https://localhost" //port de l'Api Gateway
   }
 }
