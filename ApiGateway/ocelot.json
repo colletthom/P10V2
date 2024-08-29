@@ -21,7 +21,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "nfront", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "Front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 80
         }
       ],

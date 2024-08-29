@@ -18,17 +18,7 @@ COPY . .
 WORKDIR "/src/back_Patient"
 RUN dotnet build "./back_Patient.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-#FROM build AS certs
-#COPY aspnetapp.pfx /https/aspnetapp.pfx
-#COPY init.sh init.sh
-#COPY aspnetapp.pfx /app/aspnetapp.pfx
-#RUN chmod +x ./init.sh &&\
-    #./init.sh &&\
-    #mkdir -pv /https &&\
-    #cp -v aspnetapp.pfx /https/aspnetapp.pfx
-#COPY ./back_Patient/aspnetapp.pfx /https/aspnetapp.pfx
 
-#FROM certs AS publish
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./back_Patient.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
@@ -36,5 +26,4 @@ RUN dotnet publish "./back_Patient.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-#COPY --from=publish /https/aspnetapp.pfx /https/aspnetapp.pfx
 ENTRYPOINT ["dotnet", "back_Patient.dll"]

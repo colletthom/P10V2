@@ -21,13 +21,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<HttpClient>();
-//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://apigateway")});
-/*
- //Cela reproduit mon erreur de remplacement de localhost
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.HttpsPort = 443;
-});*/
 
 var app = builder.Build();
 
@@ -43,7 +36,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

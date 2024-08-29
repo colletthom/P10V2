@@ -59,14 +59,11 @@ else
             };
 
             using var client = new HttpClient(handler);
-            listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://back_Patient:8080/API/patient/");
-            //avec nback_patient j'ai désormais l'erreur "The SSL connection could not be established, see inner exception."    
+            //listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://back_Patient:8080/API/Patient/");
 
-            // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("/API/Patient");
-            // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://localhost:5011/API/patient-back/");
-            // https://localhost:5011/API/patient-back/ se transforme en https://back_patient:8081/API/Patient/ : pb à résoudre
-            //listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://localhost:8081/API/Patient");
-            //"Connection refused (localhost:8081)" "ca peut être n'importe quoi"
+            //pour passer par le gateway il faudrait faire la ligne ci-dessous, mais il repasse en HTTPS et dans ce cas j'ai un problème de certificat.
+            listePatients = await client.GetFromJsonAsync<List<PatientVM>>("https://ApiGateway:5011/API/patient-back/");
+
         }
         catch (HttpRequestException ex)
         {
