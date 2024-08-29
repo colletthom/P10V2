@@ -4,8 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "back_patient": "StartDebugging",
-        "front": "StartDebugging",
+        "nback_patient": "StartDebugging",
+        "nfront": "StartDebugging",
         "apigateway": "StartDebugging"
       }
     }

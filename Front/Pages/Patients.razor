@@ -51,9 +51,17 @@ else
     {
         try
         {
-            listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://nback_patient:8081/API/Patient");  
+            using var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+
+            using var client = new HttpClient(handler);
+            listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://back_Patient:8080/API/patient/");
             //avec nback_patient j'ai désormais l'erreur "The SSL connection could not be established, see inner exception."    
-            
+
             // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("/API/Patient");
             // listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("https://localhost:5011/API/patient-back/");
             // https://localhost:5011/API/patient-back/ se transforme en https://back_patient:8081/API/Patient/ : pb à résoudre
@@ -62,8 +70,8 @@ else
         }
         catch (HttpRequestException ex)
         {
-           
-         errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message;
+
+            errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message+"\n"+ex.StackTrace;
         }
     }  
 }

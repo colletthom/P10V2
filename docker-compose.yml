@@ -6,7 +6,7 @@ networks:
 
 services:
   sqldata:
-    container_name: nsqldata
+    #container_name: nsqldata
     networks:
       - mynetwork
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -19,32 +19,39 @@ services:
       - "1433:1433"
     restart: always
 
-  back_patient:
-    container_name: nback_patient
+  nback_patient:
+    #container_name: nback_patient
     networks:
       - mynetwork
     depends_on:
       - sqldata
     image: ${DOCKER_REGISTRY-}backpatient
+    #command: /app/init.sh
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-    ports:
-      - "8080:8080"
-      - "8081:8081"
+      #----------------------------------------------------------------------------
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=12345678
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+     # - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/aspnetapp.pfx
+      #-------------------------------------------------------------------------
+
+   # ports:
+     # - "8080:8080"
+     # - "8081:8081"
     build:
       context: .
       dockerfile: back_Patient/Dockerfile
 
   apigateway:
-    container_name: napigateway
+    #container_name: napigateway
     networks:
       - mynetwork
     image: ${DOCKER_REGISTRY-}apigateway
     depends_on:
-      - front
-      - back_patient 
+      - nfront
+      - nback_patient 
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
@@ -55,8 +62,8 @@ services:
     ports:
       - "5011:5011"
 
-  front:
-    container_name: nfront
+  nfront:
+    #container_name: nfront
     networks:
       - mynetwork
     depends_on:

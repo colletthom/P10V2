@@ -4,11 +4,11 @@
     {
       "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
       "UpstreamPathTemplate": "/API/patient-back/", 
-      "downstreamScheme": "https",
+      "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "nback_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
-          "Port": 8081
+          "Host": "back_Patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/API/Patient/" 
