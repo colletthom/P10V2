@@ -1,4 +1,4 @@
-﻿@page "/patients"
+﻿@page "/ListePatients"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net
@@ -18,6 +18,7 @@
                 <th>Genre</th>
                 <th>Adresse</th>
                 <th>Téléphone</th>
+                <th>Détails</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                     <td>@patient.Genre</td>
                     <td>@patient.AdressePostale</td>
                     <td>@patient.Telephone</td>
+                    <td><a href="@($"DetailPatient/{patient.Id}")">Détails</a></td>
                 </tr>
             }
         </tbody>
@@ -57,17 +59,12 @@ else
             {
                 return true;
             };
-
             using var client = new HttpClient(handler);
-            //listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://back_Patient:8080/API/Patient/");
 
-            //pour passer par le gateway il faudrait faire la ligne ci-dessous, mais il repasse en HTTPS et dans ce cas j'ai un problème de certificat.
             listePatients = await client.GetFromJsonAsync<List<PatientVM>>("https://ApiGateway:5011/API/patient-back/");
-
         }
         catch (HttpRequestException ex)
         {
-
             errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message+"\n"+ex.StackTrace;
         }
     }  

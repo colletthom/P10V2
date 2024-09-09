@@ -1,0 +1,74 @@
+﻿@page "/DetailPatient/{id}"
+@inject HttpClient HttpClient
+@using System.Text.Json
+@using System.Net
+@using VModel
+
+<h3>Détail du patient</h3>
+
+@if (patient != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Date de Naissance</th>
+                <th>Genre</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@patient.Id</td>
+                <td>@patient.Prenom</td>
+                <td>@patient.Nom</td>
+                <td>@patient.DateNaissance</td>
+                <td>@patient.Genre</td>
+                <td>@patient.AdressePostale</td>
+                <td>@patient.Telephone</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>
+        <tr>Aucun patient trouvé.</tr>
+        @errorMessage
+    </p>
+}
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    public PatientVM? patient;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            using var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+            using var client = new HttpClient(handler);
+
+            var patientId = int.Parse(id);
+            //patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/Patient/{patientId}");
+        
+            patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message + "\n" + ex.StackTrace;
+        }
+    }
+}
