@@ -3,7 +3,7 @@
     //back_Patient
     {
       "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
-      "UpstreamPathTemplate": "/API/patient-back/", 
+      "UpstreamPathTemplate": "/API/patient-back/{everything}",
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -11,7 +11,14 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/API/Patient/" 
+      "DownstreamPathTemplate": "/API/Patient/{everything}"
+      /*  "AuthenticationOptions": {
+         "AuthenticationProviderKey": "IdentityApiKey",
+         "AllowedScopes": []
+
+      il y aura également des modifs dans program.cs
+      https://learn.microsoft.com/fr-fr/dotnet/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot
+      }*/
     },
     // Front
     {

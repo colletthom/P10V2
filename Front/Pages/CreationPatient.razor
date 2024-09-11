@@ -1,0 +1,78 @@
+﻿@page "/CreationPatient"
+@inject HttpClient HttpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@using System.Text.Json
+@using System.Net
+@using VModel
+
+
+<h3>Créer un patient</h3>
+
+<form onsubmit="@CreatePatient">
+    <div class="form-group">
+        <label for="Prenom">Prénom</label>
+        <input type="text" id="Prenom" class="form-control" @bind="@newPatient.Prenom" />
+    </div>
+
+    <div class="form-group">
+        <label for="Nom">Nom</label>
+        <input type="text" id="Nom" class="form-control" @bind="@newPatient.Nom" />
+    </div>
+
+    <div class="form-group">
+        <label for="DateNaissance">Date de Naissance</label>
+        <input type="date" id="DateNaissance" class="form-control" @bind="@newPatient.DateNaissance" />
+    </div>
+
+    <div class="form-group">
+        <label for="Genre">Genre</label>
+        <input type="text" id="Genre" class="form-control" @bind="@newPatient.Genre" maxlength="1" />
+    </div>
+
+    <div class="form-group">
+        <label for="AdressePostale">Adresse Postale</label>
+        <input type="text" id="AdressePostale" class="form-control" @bind="@newPatient.AdressePostale" />
+    </div>
+
+    <div class="form-group">
+        <label for="Telephone">Téléphone</label>
+        <input type="text" id="Telephone" class="form-control" @bind="@newPatient.Telephone" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+</form>
+
+@code {
+    private PatientVM newPatient = new PatientVM();
+    private string? errorMessage;
+
+    private async Task CreatePatient()
+    {
+        try
+        {
+            using var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+            using var client = new HttpClient(handler);
+
+            var response = await client.PostAsJsonAsync<PatientVM>("https://ApiGateway:5011/API/patient-back/", newPatient);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                NavigationManager.NavigateTo("/ListePatients");
+            }
+            else
+            {
+                // Gérer l'erreur de création du patient
+                errorMessage = "Une erreur s'est produite lors de la création du patient : " + response.ReasonPhrase;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Une erreur s'est produite lors de la mise à jour du patient : " + ex.Message + "\n" + ex.StackTrace;
+        }
+    }
+}

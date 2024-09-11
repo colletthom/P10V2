@@ -4,14 +4,16 @@
 @using System.Net
 @using VModel
 
-<h3>Liste des patients</h3>
+<div class="d-flex justify-content-between">
+    <h3>Liste des patients</h3>
+    <NavLink href="CreationPatient" class="btn btn-primary ml-auto">Ajouter un patient</NavLink>
+</div>
 
 @if (listePatients != null)
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Date de Naissance</th>
@@ -25,14 +27,13 @@
             @foreach (var patient in listePatients)
             {
                 <tr>
-                    <td>@patient.Id</td>
                     <td>@patient.Prenom</td>
                     <td>@patient.Nom</td>
                     <td>@patient.DateNaissance</td>
                     <td>@patient.Genre</td>
                     <td>@patient.AdressePostale</td>
                     <td>@patient.Telephone</td>
-                    <td><a href="@($"DetailPatient/{patient.Id}")">Détails</a></td>
+                    <td><a href="@($"UpdatePatient/{patient.Id}")">Mise à jour</a></td>
                 </tr>
             }
         </tbody>

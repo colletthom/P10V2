@@ -1,47 +1,79 @@
-﻿@page "/UpdatePatient"
+﻿@page "/UpdatePatient/{id}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net
+@using System.Text
 @using VModel
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<h3>Mise à jour d'un patient</h3>
+<h3>Mise à jour du patient</h3>
 
 @if (patient != null)
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th>Date de Naissance</th>
-                <th>Genre</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
+                <th>Détail</th>
+                <th>Valeurs</th>
+                <th>Valeurs à modifier</th>
             </tr>
         </thead>
         <tbody>
-                <tr>
-                    <td>@patient.Id</td>
-                    <td>@patient.Prenom</td>
-                    <td>@patient.Nom</td>
-                    <td>@patient.DateNaissance</td>
-                    <td>@patient.Genre</td>
-                    <td>@patient.AdressePostale</td>
-                    <td>@patient.Telephone</td>
-                    @*   <td><a href="@Url.Action("Details", "Patient", new { id = patient.Id })">Détails</a></td>*@
-                </tr>
+            <tr>
+                <td>Id</td>
+                <td>@patient.Id</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Prénom</td>
+                <td>@patient.Prenom</td>
+                <td><input type="text" @bind="@patient.Prenom" /></td>
+            </tr>
+            <tr>
+                <td>Nom</td>
+                <td>@patient.Nom</td>
+                <td><input type="text" @bind="@patient.Nom" /></td>
+            </tr>
+            <tr>
+                <td>Date de Naissance</td>
+                <td>@patient.DateNaissance</td>
+                <td><input type="text" @bind="@patient.DateNaissance" /></td>
+            </tr>
+            <tr>
+                <td>Genre</td>
+                <td>@patient.Genre</td>
+                <td><input type="text" @bind="@patient.Genre" /></td>
+            </tr>
+            <tr>
+                <td>Adresse</td>
+                <td>@patient.AdressePostale</td>
+                <td><input type="text" @bind="@patient.AdressePostale" /></td>
+            </tr>
+            <tr>
+                <td>Téléphone</td>
+                <td>@patient.Telephone</td>
+                <td><input type="text" @bind="@patient.Telephone" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><button @onclick="MiseAJourPatient">Mettre à jour</button></td>
+            </tr>
         </tbody>
     </table>
 }
 else
 {
-    <p><tr>Aucun patient trouvé.</tr>
+    <p>
+        <tr>Aucun patient trouvé.</tr>
         @errorMessage
     </p>
 }
 
 @code {
+    [Parameter]
+    public string id { get; set; }
+
     public PatientVM? patient;
     private string? errorMessage;
 
@@ -57,11 +89,47 @@ else
             };
             using var client = new HttpClient(handler);
 
-             patient = await client.GetFromJsonAsync<PatientVM>("https://ApiGateway:5011/API/patient-back/");
+            var patientId = int.Parse(id);
+            patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
+
         }
         catch (HttpRequestException ex)
         {
-            errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message+"\n"+ex.StackTrace;
+            errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message + "\n" + ex.StackTrace;
         }
-    }  
+    }
+
+
+    private async Task MiseAJourPatient()
+    {
+        try
+        {
+            using var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+            using var client = new HttpClient(handler);
+
+            var patientId = int.Parse(id);
+
+            var jsonContent = new StringContent(JsonSerializer.Serialize(patient), Encoding.UTF8, "application/json");
+            var response = await client.PutAsync($"https://ApiGateway:5011/API/patient-back/{patientId}", jsonContent);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                // Mise à jour réussie
+                NavigationManager.NavigateTo($"UpdatePatient/{patient.Id}");
+            }
+            else
+            {
+                errorMessage = "Une erreur s'est produite lors de la mise à jour du patient : " + response.ReasonPhrase;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Une erreur s'est produite lors de la mise à jour du patient : " + ex.Message + "\n" + ex.StackTrace;
+        }
+    }
 }

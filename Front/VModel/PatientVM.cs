@@ -10,5 +10,4 @@
         public string? AdressePostale { get; set; }
         public string? Telephone { get; set; }
     }
-
 }
