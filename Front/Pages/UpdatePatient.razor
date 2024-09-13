@@ -3,6 +3,8 @@
 @using System.Text.Json
 @using System.Net
 @using System.Text
+@using System.Collections
+@using System.ComponentModel.DataAnnotations
 @using VModel
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
@@ -20,29 +22,28 @@
         </thead>
         <tbody>
             <tr>
-                <td>Id</td>
-                <td>@patient.Id</td>
-                <td></td>
-            </tr>
-            <tr>
                 <td>Prénom</td>
                 <td>@patient.Prenom</td>
-                <td><input type="text" @bind="@patient.Prenom" /></td>
+                <td><input type="text" @bind="@patient.Prenom" required title="Le prénom est obligatoire" /></td>
             </tr>
             <tr>
                 <td>Nom</td>
                 <td>@patient.Nom</td>
-                <td><input type="text" @bind="@patient.Nom" /></td>
+                <td><input type="text" @bind="@patient.Nom" required title="Le nom est obligatoire" /></td>
             </tr>
             <tr>
                 <td>Date de Naissance</td>
-                <td>@patient.DateNaissance</td>
-                <td><input type="text" @bind="@patient.DateNaissance" /></td>
+                <td>@patient.DateNaissance.ToShortDateString()</td>
+                <td><input type="date" @bind="@patient.DateNaissance" required title="La date de naissance obligatoire" /></td>
             </tr>
             <tr>
                 <td>Genre</td>
                 <td>@patient.Genre</td>
-                <td><input type="text" @bind="@patient.Genre" /></td>
+                <select type="text" id="Genre" class="form-control" @bind="@patient.Genre" required title="Le genre (M ou F) est obligatoire">
+                    <option value="">Sélectionnez le genre</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Feminin</option>
+                </select>
             </tr>
             <tr>
                 <td>Adresse</td>
@@ -58,6 +59,9 @@
                 <td></td>
                 <td></td>
                 <td><button @onclick="MiseAJourPatient">Mettre à jour</button></td>
+            </tr>
+            <tr>
+                <td>@errorMessage</td>
             </tr>
         </tbody>
     </table>
@@ -104,6 +108,20 @@ else
     {
         try
         {
+
+            var validationResults = new PatientVMValidation(patient).Validate();
+
+            if (validationResults.Any())
+            {
+                errorMessage = "";
+                foreach (var error in validationResults)
+                {
+                    errorMessage += $"{error.ErrorMessage}";
+                }
+                return;
+            }
+
+
             using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
@@ -120,6 +138,7 @@ else
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 // Mise à jour réussie
+                errorMessage = "Mise à jour réussie";
                 NavigationManager.NavigateTo($"UpdatePatient/{patient.Id}");
             }
             else
@@ -130,6 +149,29 @@ else
         catch (HttpRequestException ex)
         {
             errorMessage = "Une erreur s'est produite lors de la mise à jour du patient : " + ex.Message + "\n" + ex.StackTrace;
+        }
+    }
+
+    public class PatientVMValidation
+    {
+        private readonly PatientVM _patientVM; 
+
+        public PatientVMValidation(PatientVM patientVM)
+        {
+            _patientVM = patientVM;
+        }
+        public IEnumerable<ValidationResult> Validate()
+        {
+            if (string.IsNullOrEmpty(_patientVM.Nom))
+            {
+                yield return new ValidationResult("Le nom est obligatoire.", new[] { nameof(PatientVM.Nom) });
+            }
+
+            if (string.IsNullOrEmpty(_patientVM.Prenom))
+            {
+                yield return new ValidationResult("Le prénom est obligatoire.", new[] { nameof(PatientVM.Prenom) });
+            }
+
         }
     }
 }

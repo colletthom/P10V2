@@ -17,7 +17,7 @@
                 <th>Prénom</th>
                 <th>Nom</th>
                 <th>Date de Naissance</th>
-                <th>Genre</th>
+                <th>Genre(M/F)</th>
                 <th>Adresse</th>
                 <th>Téléphone</th>
                 <th>Détails</th>
@@ -29,7 +29,7 @@
                 <tr>
                     <td>@patient.Prenom</td>
                     <td>@patient.Nom</td>
-                    <td>@patient.DateNaissance</td>
+                    <td>@patient.DateNaissance.ToShortDateString()</td>
                     <td>@patient.Genre</td>
                     <td>@patient.AdressePostale</td>
                     <td>@patient.Telephone</td>
