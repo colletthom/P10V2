@@ -7,7 +7,7 @@ EXPOSE 8080
 EXPOSE 8081
 #doit correspondre au launchsettings.json
 
-COPY ./AXA-PROXY-ROOT-CA.cer /usr/local/share/ca-certificates/
+#COPY ./AXA-PROXY-ROOT-CA.cer /usr/local/share/ca-certificates/
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 #Je peux mettre Release ou Debug ca ne change rien
@@ -26,6 +26,6 @@ RUN dotnet publish "./back_Patient.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 
 FROM base AS final
 WORKDIR /app
-RUN update-ca-certificates && echo 'trusted' >> /etc/ssl/certs/AXA-PROXY-ROOT-CA.cer
+#RUN update-ca-certificates && echo 'trusted' >> /etc/ssl/certs/AXA-PROXY-ROOT-CA.cer
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "back_Patient.dll"]
