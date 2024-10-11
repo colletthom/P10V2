@@ -1,4 +1,5 @@
-﻿@page "/UpdatePatient/{id}"
+﻿@attribute [Authorize]
+@page "/UpdatePatient/{id}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net

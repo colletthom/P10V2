@@ -1,4 +1,5 @@
-﻿@page "/CreationPatient"
+﻿@attribute [Authorize]
+@page "/CreationPatient"
 @inject HttpClient HttpClient
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 @using System.Text.Json

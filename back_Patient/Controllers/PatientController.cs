@@ -4,11 +4,10 @@ using back_Patient.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web.Resource;
 
 namespace back_Patient.Controllers
 {
-    //[Authorize]
+   // [Authorize]
     [ApiController]
     [Route("API/[Controller]")]
     public class PatientController : ControllerBase
@@ -24,9 +23,25 @@ namespace back_Patient.Controllers
             _patientService = patientService;
         }
 
+        /// Checks if a cookie / key exists in the current HttpContext.
+        /// </summary>
+      /*  public bool CookieExist(string cookieName, string keyName)
+        {
+            IRequestCookieCollection cookies = _httpContextAccessor.HttpContext.Request.Cookies;
+            //  HttpCookieCollection cookies = HttpContext.Current.Request.Cookies;
+            return (String.IsNullOrEmpty(keyName))
+                ? cookies[cookieName] != null
+                : cookies[cookieName] != null && cookies[cookieName][keyName] != null;
+        }*/
+      
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            //  CookieExist(".AspNetCore.Identity.Application");
+          //  string cookie = Request.Cookies[".AspNetCore.Identity.Application"];
+
+
+
             var ListePatients = new List<Patient>();
             try
             {

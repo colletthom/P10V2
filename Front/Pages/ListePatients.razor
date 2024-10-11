@@ -1,4 +1,5 @@
-﻿@page "/ListePatients"
+﻿@attribute [Authorize]
+@page "/ListePatients"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net
@@ -46,9 +47,11 @@ else
     </p>
 }
 
+
 @code {
     public  List<PatientVM>? listePatients;
     private string? errorMessage;
+
 
     protected override async Task OnInitializedAsync()
     {
