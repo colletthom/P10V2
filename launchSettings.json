@@ -6,7 +6,8 @@
       "serviceActions": {
         "nback_patient": "StartDebugging",
         "nfront": "StartDebugging",
-        "apigateway": "StartDebugging"
+        "apigateway": "StartDebugging",
+        "nback_note": "StartDebugging"
       }
     }
   }

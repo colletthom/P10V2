@@ -12,13 +12,19 @@
         }
       ],
       "DownstreamPathTemplate": "/API/Patient/{everything}"
-      /*  "AuthenticationOptions": {
-         "AuthenticationProviderKey": "IdentityApiKey",
-         "AllowedScopes": []
-
-      il y aura également des modifs dans program.cs
-      https://learn.microsoft.com/fr-fr/dotnet/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot
-      }*/
+    },
+    //back_gestionDesNotes
+    {
+      "UpstreamHttpMethod": [ "Get", "Put", "Post", "Delete" ],
+      "UpstreamPathTemplate": "/API/gestiondesnotes-back/{everything}",
+      "downstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "back_gestionDesNotes", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 8090
+        }
+      ],
+      "DownstreamPathTemplate": "/API/Note/{everything}"
     },
     // Front
     {

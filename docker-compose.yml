@@ -10,13 +10,28 @@ services:
     networks:
       - mynetwork
     image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
     environment:
       - ACCEPT_EULA=Y 
       - MSSQL_SA_PASSWORD=YourStrong(!)Password 
-    volumes:
-      - db_data:/var/opt/mssql  
+    volumes:   
+      - db_data:/var/opt/mssql
     ports:
       - "1433:1433"
+    restart: always
+#    command: /bin/sh -c "chown mssql:mssql /var/opt/mssql/data/master.mdf && exec /opt/mssql/bin/sqlservr" //fonctionne si on le lance avec l'utilisaeur root
+
+  mongodb:
+    image: mongo
+    networks:
+      - mynetwork
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=SAMongo
+      - MONGO_INITDB_ROOT_PASSWORD=YourStrong(!)Password
+    volumes:
+      - db_data:/data/db
+    ports:
+      - "27017:27017"
     restart: always
 
   nback_patient:
@@ -30,13 +45,23 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-
-   # ports:
-     # - "8080:8080"
-     # - "8081:8081"
     build:
       context: .
       dockerfile: back_Patient/Dockerfile
+
+  nback_note:
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+    image: ${DOCKER_REGISTRY-}backnote
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8090
+      - ASPNETCORE_HTTPS_PORTS=8091
+    build:
+      context: .
+      dockerfile: back_gestionDesNotes/Dockerfile
 
   apigateway:
     #container_name: napigateway
@@ -46,6 +71,7 @@ services:
     depends_on:
       - nfront
       - nback_patient 
+      - nback_note
     build:
       context: .
       dockerfile: ApiGateway/Dockerfile
