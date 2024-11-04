@@ -1,3 +1,4 @@
+using Front;
 using Front.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,10 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddHttpContextAccessor(); //pour transmettre le cookie
 
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline.
