@@ -1,0 +1,44 @@
+﻿@page
+@model Front.Pages.Note.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>NoteVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NoteVM.patId" class="control-label"></label>
+                <input asp-for="NoteVM.patId" class="form-control" />
+                <span asp-validation-for="NoteVM.patId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoteVM.patient" class="control-label"></label>
+                <input asp-for="NoteVM.patient" class="form-control" />
+                <span asp-validation-for="NoteVM.patient" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoteVM.note" class="control-label"></label>
+                <input asp-for="NoteVM.note" class="form-control" />
+                <span asp-validation-for="NoteVM.note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Front.VModel;
 
 namespace Front.Data
 {
@@ -24,5 +25,6 @@ namespace Front.Data
             }
             */
         }
+        public DbSet<Front.VModel.NoteVM>? NoteVM { get; set; }
     }
 }

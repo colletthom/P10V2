@@ -1,4 +1,4 @@
-﻿using back_gestionDesNotes.Model;
+﻿using back_gestionDesNotes.Models;
 using MongoDB.Driver;
 
 namespace back_gestionDesNotes.Data

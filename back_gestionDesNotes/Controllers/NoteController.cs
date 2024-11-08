@@ -1,26 +1,76 @@
-﻿using back_gestionDesNotes.Model;
-using back_gestionDesNotes.Data;
+﻿using back_gestionDesNotes.Models;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+using back_gestionDesNotes.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace back_gestionDesNotes.Controllers
 {
+    [ApiController]
     [Route("API/[Controller]")]
     public class NoteController : ControllerBase
     {
-        private readonly ApplicationMongoDbContext _context;
+        private readonly NotesService _notesService;
 
-        public NoteController(ApplicationMongoDbContext context)
+        public NoteController(NotesService notesService)
         {
-            _context = context;
+            _notesService = notesService;
+        }
+        
+        [HttpGet]
+        public async Task<List<Note>> Get() =>
+            await _notesService.GetAsync();
+
+        [HttpGet("{patId}")]
+        public async Task<ActionResult<List<Note>>> GetPatient(int patId)
+        {
+            var note = await _notesService.GetPatientAsync(patId);
+
+            if (note is null)
+            {
+                return NotFound();
+            }
+
+            return note ;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpPost]
+        public async Task<IActionResult> Post(Note newNote)
         {
-            var filter = Builders<Note>.Filter.Eq(x => x.Id, id);
-            var Notes = await _context.Notes.Find(filter).ToListAsync();
-            return Ok(Notes);
+            await _notesService.CreateAsync(newNote);
+
+            return CreatedAtAction(nameof(Get), new { id = newNote.Id }, newNote);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, Note updatedNote)
+        {
+            var note = await _notesService.GetAsync(id);
+
+            if (note is null)
+            {
+                return NotFound();
+            }
+
+            updatedNote.patId = note.patId;
+
+            await _notesService.UpdateAsync(id, updatedNote);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var note = await _notesService.GetAsync(id);
+
+            if (note is null)
+            {
+                return NotFound();
+            }
+
+            await _notesService.RemoveAsync(id);
+
+            return NoContent();
         }
     }
 }

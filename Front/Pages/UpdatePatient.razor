@@ -64,6 +64,9 @@
             <tr>
                 <td>@errorMessage</td>
             </tr>
+            <tr>
+                <td><a href="@($"Note/Create/{patient.Id}")">Note</a></td>
+            </tr>
         </tbody>
     </table>
 }
@@ -96,7 +99,6 @@ else
 
             var patientId = int.Parse(id);
             patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
-
         }
         catch (HttpRequestException ex)
         {

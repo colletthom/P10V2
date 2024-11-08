@@ -1,5 +1,6 @@
 volumes:
   db_data:
+  db_datamongo:
 networks:
   mynetwork:
     driver: bridge
@@ -28,11 +29,14 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=SAMongo
       - MONGO_INITDB_ROOT_PASSWORD=YourStrong(!)Password
+ #     - MONGO_INITDB_DATABASE=P10MediLaboMongo
+ #     - MONGO_HOSTNAME=mongodb
     volumes:
-      - db_data:/data/db
+      - db_datamongo:/data/db
     ports:
       - "27017:27017"
     restart: always
+  #  command: ["--sslMode", "disabled"]
 
   nback_patient:
     #container_name: nback_patient
@@ -55,10 +59,12 @@ services:
     depends_on:
       - mongodb
     image: ${DOCKER_REGISTRY-}backnote
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8090
-      - ASPNETCORE_HTTPS_PORTS=8091
+ #   ports:
+ #       - 8090:8090
+ #   environment:
+ #     - ASPNETCORE_ENVIRONMENT=Development
+ #     - ASPNETCORE_HTTP_PORTS=8090
+ #     - ASPNETCORE_HTTPS_PORTS=8091
     build:
       context: .
       dockerfile: back_gestionDesNotes/Dockerfile
