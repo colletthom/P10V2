@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Front.Data;
 using Front.VModel;
+using System.Security.Cryptography;
 
 namespace Front.Pages.Note
 {
     public class CreateModel : PageModel
     {
         private readonly Front.Data.ApplicationDbContext _context;
+        private int pathId;
 
         public CreateModel(Front.Data.ApplicationDbContext context)
         {
@@ -21,7 +23,7 @@ namespace Front.Pages.Note
 
         public IActionResult OnGet(int id)
         {
-            var routeId = id;
+            pathId = id;                
             return Page();
         }
 
