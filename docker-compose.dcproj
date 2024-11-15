@@ -7,14 +7,12 @@
     <ProjectGuid>bad8dd39-dade-49aa-9a0f-7e8b37afd14c</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceName>apigateway</DockerServiceName>
+	  <DockerComposeProjectPath></DockerComposeProjectPath>
   </PropertyGroup>
   <PropertyGroup>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

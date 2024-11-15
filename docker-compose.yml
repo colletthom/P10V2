@@ -61,7 +61,7 @@ services:
     image: ${DOCKER_REGISTRY-}backnote
  #   ports:
  #       - 8090:8090
- #   environment:
+#    environment:
  #     - ASPNETCORE_ENVIRONMENT=Development
  #     - ASPNETCORE_HTTP_PORTS=8090
  #     - ASPNETCORE_HTTPS_PORTS=8091
