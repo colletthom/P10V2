@@ -72,7 +72,7 @@ else
             // Inclure la cookie dans les en-têtes de la requête
             client.DefaultRequestHeaders.Add("Cookie", authCookie);*/
 
-            listePatients = await client.GetFromJsonAsync<List<PatientVM>>("https://ApiGateway:5011/API/patient-back/");
+            listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://ApiGateway:5010/API/patient-back/");
         }
         catch (HttpRequestException ex)
         {

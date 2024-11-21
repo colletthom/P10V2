@@ -42,7 +42,7 @@
     }
   ],
   "GlobalConfiguration": {
-     "BaseUrl": "https://ApiGateway:5011" //port de l'Api Gateway
+     "BaseUrl": "http://ApiGateway:5010" //port de l'Api Gateway
     // "BaseUrl": "https://localhost" //port de l'Api Gateway
   }
 }

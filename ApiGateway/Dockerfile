@@ -4,13 +4,14 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 5010
-EXPOSE 5011
+#EXPOSE 5011
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ApiGateway/ApiGateway.csproj", "ApiGateway/"]
 RUN dotnet restore "./ApiGateway/ApiGateway.csproj"
+#RUN dotnet dev-certs https --trust
 COPY . .
 WORKDIR "/src/ApiGateway"
 RUN dotnet build "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
@@ -22,4 +23,5 @@ RUN dotnet publish "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+#COPY --from=build /root/.dotnet/corefx/cryptography/x509stores/my/ /root/.dotnet/corefx/cryptography/x509stores/my/
 ENTRYPOINT ["dotnet", "ApiGateway.dll"]

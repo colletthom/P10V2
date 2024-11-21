@@ -45,10 +45,10 @@ services:
     depends_on:
       - sqldata
     image: ${DOCKER_REGISTRY-}backpatient
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #    - ASPNETCORE_HTTP_PORTS=8080
+  #    - ASPNETCORE_HTTPS_PORTS=8081
     build:
       context: .
       dockerfile: back_Patient/Dockerfile
@@ -84,9 +84,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5010
-      - ASPNETCORE_HTTPS_PORTS=5011
+   #   - ASPNETCORE_HTTPS_KESTREL_CERTIFICATE_VALIDATION=none
+   #   - ASPNETCORE_HTTPS_CERTIFICATE_FILE=/root/.dotnet/corefx/cryptography/x509stores/my/localhost.pfx
+   #   - ASPNETCORE_HTTPS_PORTS=5011
     ports:
-      - "5011:5011"
+      - "5010:5010"
 
   nfront:
     #container_name: nfront
@@ -100,6 +102,6 @@ services:
       dockerfile: Front/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_HTTP_PORTS=9000
       - ASPNETCORE_HTTPS_PORTS=443
 

@@ -63,7 +63,7 @@
             };
             using var client = new HttpClient(handler);
 
-            var response = await client.PostAsJsonAsync<PatientVM>("https://ApiGateway:5011/API/patient-back/", newPatient);
+            var response = await client.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
