@@ -7,7 +7,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "back_Patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nback_patient",
           "Port": 8080
         }
       ],
@@ -20,7 +20,8 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "back_gestionDesNotes", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          // "Host": "back_gestionDesNotes", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nback_note",
           "Port": 8090
         }
       ],
@@ -34,7 +35,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "Front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nfront", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 80
         }
       ],

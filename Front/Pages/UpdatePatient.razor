@@ -98,7 +98,7 @@ else
             using var client = new HttpClient(handler);
 
             var patientId = int.Parse(id);
-            patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
+            patient = await client.GetFromJsonAsync<PatientVM>($"http://ApiGateway:5010/API/patient-back/{patientId}");
         }
         catch (HttpRequestException ex)
         {
@@ -136,7 +136,7 @@ else
             var patientId = int.Parse(id);
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(patient), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"https://ApiGateway:5011/API/patient-back/{patientId}", jsonContent);
+            var response = await client.PutAsync($"http://ApiGateway:5010/API/patient-back/{patientId}", jsonContent);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
