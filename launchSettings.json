@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Docker Compose": {
+    "Podman Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
@@ -8,6 +8,10 @@
         "nfront": "StartDebugging",
         "apigateway": "StartDebugging",
         "nback_note": "StartDebugging"
+      },
+      "dockerComposeFile": "docker-compose.yml", // Assurez-vous que le chemin est correct
+      "environmentVariables": {
+        "COMPOSE_COMMAND": "podman-compose"
       }
     }
   }

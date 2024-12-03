@@ -1,7 +1,10 @@
 using Front;
 using Front.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -18,6 +22,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddHttpContextAccessor(); //pour transmettre le cookie
+
+/*
+//Suite au passage en HTTP pour pouvoir communiquer dans les deux sens
+builder.Services.AddWebSockets(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(120); // Intervalle de maintien de connexion
+});*/
 
 var app = builder.Build();
 
@@ -34,6 +45,30 @@ else
   //  app.UseHsts();
 }
 //app.UseHttpsRedirection();
+
+/*
+//Suite au passage en HTTP pour pouvoir communiquer dans les deux sens
+app.Use(async (context, next) =>
+{
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+    // Gérer la connexion WebSocket ici
+    var buffer = new byte[1024 * 4];
+    WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte> (buffer), CancellationToken.None);
+    while (!result.CloseStatus.HasValue)
+    {
+        // Traitez le message reçu ici (par exemple, en l'écho)
+        await webSocket.SendAsync(new ArraySegment<byte> (buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+        result = await webSocket.ReceiveAsync(new ArraySegment<byte> (buffer), CancellationToken.None);
+    }
+    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+    }        
+    else        
+    {            
+        await next();       
+    }
+});*/
 
 app.UseStaticFiles();
 

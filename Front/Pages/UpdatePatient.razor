@@ -89,16 +89,18 @@ else
     {
         try
         {
-            using var handler = new HttpClientHandler();
+          /*  using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
             {
                 return true;
             };
-            using var client = new HttpClient(handler);
+            using var client = new HttpClient(handler);*/
 
             var patientId = int.Parse(id);
-            patient = await client.GetFromJsonAsync<PatientVM>($"http://ApiGateway:5010/API/patient-back/{patientId}");
+           // patient = await client.GetFromJsonAsync<PatientVM>($"http://ApiGateway:5010/API/patient-back/{patientId}");         
+            patient = await HttpClient.GetFromJsonAsync<PatientVM>($"http://ApiGateway:5010/API/patient-back/{patientId}");
+
         }
         catch (HttpRequestException ex)
         {
@@ -124,19 +126,19 @@ else
                 return;
             }
 
-
+            /*
             using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
             {
                 return true;
             };
-            using var client = new HttpClient(handler);
+            using var client = new HttpClient(handler);*/
 
             var patientId = int.Parse(id);
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(patient), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"http://ApiGateway:5010/API/patient-back/{patientId}", jsonContent);
+            var response = await HttpClient.PutAsync($"http://ApiGateway:5010/API/patient-back/{patientId}", jsonContent);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -174,7 +176,6 @@ else
             {
                 yield return new ValidationResult("Le prénom est obligatoire.", new[] { nameof(PatientVM.Prenom) });
             }
-
         }
     }
 }

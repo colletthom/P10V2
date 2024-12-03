@@ -1,8 +1,6 @@
 ﻿@attribute [Authorize]
 @page "/ListePatients"
 @inject HttpClient HttpClient
-@inject IAuthenticationService AuthenticationService
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @using System.Text.Json
 @using System.Net
 @using VModel
@@ -59,7 +57,7 @@ else
     {
         try
         {
-        /*    using var handler = new HttpClientHandler();
+       /*     using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
             {
@@ -72,7 +70,7 @@ else
             // Inclure la cookie dans les en-têtes de la requête
             client.DefaultRequestHeaders.Add("Cookie", authCookie);*/
 
-        //    listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://ApiGateway:5010/API/patient-back/");
+         //   listePatients = await client.GetFromJsonAsync<List<PatientVM>>("http://ApiGateway:5010/API/patient-back/");
         listePatients = await HttpClient.GetFromJsonAsync<List<PatientVM>>("http://ApiGateway:5010/API/patient-back/");
 
         }
