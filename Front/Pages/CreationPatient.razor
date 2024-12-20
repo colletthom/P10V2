@@ -9,7 +9,7 @@
 
 <h3>Créer un patient</h3>
 
-<form onsubmit="@CreatePatient">
+<form onsubmit="@CreatePatient" @onsubmit:preventDefault="true">
     <div class="form-group">
         <label for="Prenom">Prénom</label>
         <input type="text" id="Prenom" class="form-control" @bind="@newPatient.Prenom" required title="Le prénom est obligatoire"/>
@@ -55,16 +55,18 @@
     {
         try
         {
-           /* using var handler = new HttpClientHandler();
-            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
-            {
-                return true;
-            };
-            using var client = new HttpClient(handler);*/
+            /* using var handler = new HttpClientHandler();
+             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+             {
+                 return true;
+             };
+             using var client = new HttpClient(handler);*/
 
-          //  var response = await client.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
+            //  var response = await client.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
+            Console.WriteLine("JE PASSE ENC");
             var response = await HttpClient.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
+            Console.WriteLine("JE PASSE toujours");
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

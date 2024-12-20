@@ -11,7 +11,8 @@
       },
       "dockerComposeFile": "docker-compose.yml", // Assurez-vous que le chemin est correct
       "environmentVariables": {
-        "COMPOSE_COMMAND": "podman-compose"
+        "COMPOSE_COMMAND": "podman-compose",
+        "DOCKER_HOST": "npipe:////./pipe/podman-machine-default"
       }
     }
   }
