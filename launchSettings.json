@@ -13,6 +13,7 @@
       "environmentVariables": {
         "COMPOSE_COMMAND": "podman-compose",
         "DOCKER_HOST": "npipe:////./pipe/podman-machine-default"
+
       }
     }
   }
