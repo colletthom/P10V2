@@ -49,6 +49,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+           - 8080:8080
     build:
       context: .
       dockerfile: back_Patient/Dockerfile
@@ -59,12 +61,12 @@ services:
     depends_on:
       - mongodb
     image: ${DOCKER_REGISTRY-}backnote
- #   ports:
- #       - 8090:8090
- #   environment:
- #     - ASPNETCORE_ENVIRONMENT=Development
- #     - ASPNETCORE_HTTP_PORTS=8090
- #     - ASPNETCORE_HTTPS_PORTS=8091
+    ports:
+           - 8090:8090
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8090
+      - ASPNETCORE_HTTPS_PORTS=8091
     build:
       context: .
       dockerfile: back_gestionDesNotes/Dockerfile
