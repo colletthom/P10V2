@@ -36,6 +36,7 @@ namespace back_gestionDesNotes.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Note newNote)
         {
+            //dans le swagger retirer "Id": "string",
             await _notesService.CreateAsync(newNote);
 
             return CreatedAtAction(nameof(Get), new { id = newNote.Id }, newNote);
