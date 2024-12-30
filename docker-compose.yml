@@ -23,7 +23,7 @@ services:
 #    command: /bin/sh -c "chown mssql:mssql /var/opt/mssql/data/master.mdf && exec /opt/mssql/bin/sqlservr" //fonctionne si on le lance avec l'utilisaeur root
 
   mongodb:
-    image: mongo
+    image: mongo:8.0
     networks:
       - mynetwork
     environment:
