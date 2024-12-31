@@ -42,6 +42,7 @@ else
 
 app.UseStaticFiles();
 
+
 app.UseRouting();
 
 app.UseAuthentication(); //nécessaire pour garder en mémoire la connexion
