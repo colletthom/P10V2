@@ -7,7 +7,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "back_Patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nback_patient", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 8080
         }
       ],
@@ -20,7 +20,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "back_gestionDesNotes", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nback_note", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 8090
         }
       ],
@@ -34,7 +34,7 @@
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "Front", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Host": "nfront", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
           "Port": 80
         }
       ],
@@ -42,7 +42,7 @@
     }
   ],
   "GlobalConfiguration": {
-     "BaseUrl": "https://ApiGateway:5011" //port de l'Api Gateway
+     "BaseUrl": "http://ApiGateway:5010" //port de l'Api Gateway
     // "BaseUrl": "https://localhost" //port de l'Api Gateway
   }
 }

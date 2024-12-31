@@ -55,16 +55,18 @@
     {
         try
         {
-            using var handler = new HttpClientHandler();
+          /*  using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
             {
                 return true;
             };
-            using var client = new HttpClient(handler);
+            using var client = new HttpClient(handler);*/
 
-            var response = await client.PostAsJsonAsync<PatientVM>("https://ApiGateway:5011/API/patient-back/", newPatient);
-
+            //var response = await client.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
+            Console.WriteLine("JE PASSE 1");
+            var response = await HttpClient.PostAsJsonAsync<PatientVM>("http://ApiGateway:5010/API/patient-back/", newPatient);
+            Console.WriteLine("JE PASSE 2");
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 NavigationManager.NavigateTo("/ListePatients");

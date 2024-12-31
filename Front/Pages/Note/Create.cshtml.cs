@@ -28,7 +28,7 @@ namespace Front.Pages.Note
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var patient = await _client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{id}");
+            var patient = await _client.GetFromJsonAsync<PatientVM>($"http://ApiGateway:5010/API/patient-back/{id}");
 
             if (patient == null )
             {
