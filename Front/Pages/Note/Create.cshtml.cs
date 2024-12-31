@@ -14,24 +14,33 @@ namespace Front.Pages.Note
     public class CreateModel : PageModel
     {
         private readonly Front.Data.ApplicationDbContext _context;
+        private readonly HttpClient _client;
         private int pathId;
 
-        public CreateModel(Front.Data.ApplicationDbContext context)
+        public CreateModel(Front.Data.ApplicationDbContext context, HttpClient client)
         {
             _context = context;
-        }
-
-        public IActionResult OnGet(int id)
-        {
-            pathId = id;                
-            return Page();
+            _client = client;
         }
 
         [BindProperty]
         public NoteVM NoteVM { get; set; } = default!;
-        
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            var patient = await _client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{id}");
+
+            if (patient == null )
+            {
+                return NotFound();
+            }
+
+            NoteVM.patId = id.ToString();
+            NoteVM.patient = patient.Nom;
+
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
           if (!ModelState.IsValid || _context.NoteVM == null || NoteVM == null)
