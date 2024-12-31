@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Front", "Front\Front.csproj
 		{BEB10402-1F8D-4017-880F-57CF7EFC1022} = {BEB10402-1F8D-4017-880F-57CF7EFC1022}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "back_gestionDesNotes", "back_gestionDesNotes\back_gestionDesNotes.csproj", "{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "back_gestionDesNotes", "back_gestionDesNotes\back_gestionDesNotes.csproj", "{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

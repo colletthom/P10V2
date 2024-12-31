@@ -1,0 +1,82 @@
+﻿@attribute [Authorize]
+@inject HttpClient HttpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
+@page "/CreationNote/{patId:int}"
+@using System.Text.Json
+@using System.Net
+@using VModel
+
+<h3>CreationNote</h3>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}
+
+<form @onsubmit="HandleSubmit">
+    <div class="form-group">
+        <label for="note">Note</label>
+        <input type="text" id="note" class="form-control" @bind="@newNote.note" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+</form>
+
+@code {
+    [Parameter]
+    public int patId { get; set; }
+
+    private CreationNoteVM newNote = new CreationNoteVM();
+    private string? errorMessage;
+
+    private async Task HandleSubmit()
+    {
+        await CreateNote();
+    }
+
+    private async Task CreateNote()
+    {
+        try
+        {
+            using var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+            using var client = new HttpClient(handler);
+
+ 
+            var patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patId}");
+            if (patient == null)
+            {
+                NavigationManager.NavigateTo("/ListePatients");
+                return;
+            }
+
+            newNote.patId = patId;
+            newNote.patient = patient.Nom;
+
+            var response = await client.PostAsJsonAsync<CreationNoteVM>($"https://ApiGateway:5011/API/gestiondesnotes-back/", newNote);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                NavigationManager.NavigateTo("/ListePatients");
+            }
+            else
+            {
+                // Gérer l'erreur
+                errorMessage = "Une erreur s'est produite lors de la création de la note : " + response.ReasonPhrase;
+                StateHasChanged(); // Mise à jour de l'UI
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Une erreur s'est produite lors de la mise à jour de la note : " + ex.Message + "\n" + ex.StackTrace;
+            StateHasChanged(); // Mise à jour de l'UI
+        }
+    }
+}
+
