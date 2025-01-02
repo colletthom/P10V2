@@ -25,8 +25,5 @@ namespace Front.Data
             }
             */
         }
-        public DbSet<Front.VModel.NoteVM>? NoteVM { get; set; }
-
-
     }
 }

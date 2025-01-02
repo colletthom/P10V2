@@ -4,7 +4,7 @@ namespace Front.VModel
 {
     public class NoteVM
     {
-        public int id { get; set; }
+        public string? id { get; set; }
 
         [Display(Name = "Patient ID")]
         public int patId { get; set; }

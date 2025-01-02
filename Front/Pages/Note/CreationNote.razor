@@ -52,7 +52,7 @@
             var patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patId}");
             if (patient == null)
             {
-                NavigationManager.NavigateTo($"/UpdatePatient/{patIdToString}");
+                NavigationManager.NavigateTo($"/DetailPatient/{patIdToString}");
                 return;
             }
 
@@ -63,7 +63,7 @@
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                NavigationManager.NavigateTo($"/UpdatePatient/{patIdToString}");
+                NavigationManager.NavigateTo($"/DetailPatient/{patIdToString}");
             }
             else
             {

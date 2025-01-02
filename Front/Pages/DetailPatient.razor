@@ -1,5 +1,5 @@
 ﻿@attribute [Authorize]
-@page "/UpdatePatient/{id}"
+@page "/DetailPatient/{id}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net
@@ -9,7 +9,7 @@
 @using VModel
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<h3>Mise à jour du patient</h3>
+<h3>Detail du patient</h3>
 
 @if (patient != null)
 {
@@ -21,7 +21,7 @@
                 <th>Valeurs à modifier</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="no-border-table">
             <tr>
                 <td>Prénom</td>
                 <td>@patient.Prenom</td>
@@ -61,19 +61,33 @@
                 <td></td>
                 <td><button @onclick="MiseAJourPatient">Mettre à jour</button></td>
             </tr>
-            <tr>
-                <td>@errorMessage</td>
-            </tr>
-            <tr>
-                <td><a href="@($"CreationNote/{patient.Id}")">Note</a></td>
-            </tr>
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <tr>
+                    <td>@errorMessage</td>
+                </tr>
+            }
         </tbody>
     </table>
+    <h3>Notes sur le patient:</h3>
+    <div>
+        <table class="table">
+            <tbody class="no-border-table">
+                @foreach (var noteDuPatient in notesDuPatient)
+                {
+                    <tr>
+                        <td>@noteDuPatient.note</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a href="@($"CreationNote/{patient.Id}")" class="btn btn-primary">Ajout d'une Note</a>
+    </div>
 }
 else
 {
     <p>
-        <tr>Aucun patient trouvé.</tr>
+        Aucun patient trouvé.
         @errorMessage
     </p>
 }
@@ -84,6 +98,7 @@ else
 
     public PatientVM? patient;
     private string? errorMessage;
+    public List<NoteVM>? notesDuPatient;
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,6 +114,7 @@ else
 
             var patientId = int.Parse(id);
             patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
+            notesDuPatient = await client.GetFromJsonAsync<List<NoteVM>>($"https://ApiGateway:5011/API/gestiondesnotes-back/{patientId}");
         }
         catch (HttpRequestException ex)
         {
@@ -142,7 +158,7 @@ else
             {
                 // Mise à jour réussie
                 errorMessage = "Mise à jour réussie";
-                NavigationManager.NavigateTo($"UpdatePatient/{patient.Id}");
+                NavigationManager.NavigateTo($"DetailPatient/{patient.Id}");
             }
             else
             {
