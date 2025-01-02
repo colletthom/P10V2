@@ -1,8 +1,6 @@
 ﻿@attribute [Authorize]
 @page "/ListePatients"
 @inject HttpClient HttpClient
-@inject IAuthenticationService AuthenticationService
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @using System.Text.Json
 @using System.Net
 @using VModel
@@ -44,7 +42,7 @@
 }
 else
 {
-    <p><tr>Aucun patient trouvé.</tr>
+    <p><tr>Chargement de la liste des patients</tr>
         @errorMessage
     </p>
 }
@@ -53,7 +51,6 @@ else
 @code {
     public  List<PatientVM>? listePatients;
     private string? errorMessage;
-  //  private string authCookie;
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,11 +63,6 @@ else
                 return true;
             };
             using var client = new HttpClient(handler);
-
-          /*  var context = HttpContextAccessor.HttpContext;
-            authCookie = AuthenticationService.GetAuthenticationCookie(context);
-            // Inclure la cookie dans les en-têtes de la requête
-            client.DefaultRequestHeaders.Add("Cookie", authCookie);*/
 
             listePatients = await client.GetFromJsonAsync<List<PatientVM>>("https://ApiGateway:5011/API/patient-back/");
         }

@@ -10,6 +10,7 @@
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
 <h3>Detail du patient</h3>
+<p>Le risque de diabète est: </p>
 
 @if (patient != null)
 {
@@ -87,7 +88,7 @@
 else
 {
     <p>
-        Aucun patient trouvé.
+        Chargement du détail du patient
         @errorMessage
     </p>
 }
@@ -99,11 +100,12 @@ else
     public PatientVM? patient;
     private string? errorMessage;
     public List<NoteVM>? notesDuPatient;
+    public string risqueDiabete="none";
 
     protected override async Task OnInitializedAsync()
     {
         try
-        {
+        {         
             using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
@@ -115,19 +117,32 @@ else
             var patientId = int.Parse(id);
             patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
             notesDuPatient = await client.GetFromJsonAsync<List<NoteVM>>($"https://ApiGateway:5011/API/gestiondesnotes-back/{patientId}");
+           // calculRisqueDiabete(patient, notesDuPatient);
         }
         catch (HttpRequestException ex)
         {
             errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message + "\n" + ex.StackTrace;
         }
     }
+    /*
+    private string calculRisqueDiabete(PatientVM patientVM, List<NoteVM> notesDuPatient)
+    {
+        string risqueDiabete = "none";
+        bool isMoins30Ans = patientVM.DateNaissance.AddYears(30)>DateTime.Now;
+        Char sexPatient = patientVM.Genre;
+        int nombreDeclencheurs = new int();
+        foreach (var note in notesDuPatient)
+        {
+            
+        }
 
+        return risqueDiabete;
+    }*/
 
     private async Task MiseAJourPatient()
     {
         try
         {
-
             var validationResults = new PatientVMValidation(patient).Validate();
 
             if (validationResults.Any())
@@ -139,7 +154,6 @@ else
                 }
                 return;
             }
-
 
             using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
@@ -190,7 +204,6 @@ else
             {
                 yield return new ValidationResult("Le prénom est obligatoire.", new[] { nameof(PatientVM.Prenom) });
             }
-
         }
     }
 }

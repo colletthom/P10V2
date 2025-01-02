@@ -3,6 +3,8 @@ using Front.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+//await Task.Delay(500);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,12 +14,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-//builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-builder.Services.AddHttpContextAccessor(); //pour transmettre le cookie
 
 var app = builder.Build();
 
@@ -43,7 +42,7 @@ app.UseAuthentication(); //nécessaire pour garder en mémoire la connexion
 app.UseAuthorization(); //nécessaire pour logout
 
 app.MapControllers();
-app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+app.MapBlazorHub();
 
 app.Run();

@@ -7,7 +7,6 @@ networks:
 
 services:
   sqldata:
-    #container_name: nsqldata
     networks:
       - mynetwork
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -20,7 +19,7 @@ services:
     ports:
       - "1433:1433"
     restart: always
-#    command: /bin/sh -c "chown mssql:mssql /var/opt/mssql/data/master.mdf && exec /opt/mssql/bin/sqlservr" //fonctionne si on le lance avec l'utilisaeur root
+
 
   mongodb:
     image: mongo:8.0
@@ -29,17 +28,12 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=SAMongo
       - MONGO_INITDB_ROOT_PASSWORD=YourStrong(!)Password
- #     - MONGO_INITDB_DATABASE=P10MediLaboMongo
- #     - MONGO_HOSTNAME=mongodb
     volumes:
       - db_datamongo:/data/db
     ports:
       - "27017:27017"
-    restart: always
-  #  command: ["--sslMode", "disabled"]
 
   nback_patient:
-    #container_name: nback_patient
     networks:
       - mynetwork
     depends_on:
@@ -61,8 +55,8 @@ services:
     depends_on:
       - mongodb
     image: ${DOCKER_REGISTRY-}backnote
-    ports:
-           - 8090:8090
+   # ports:
+   #        - 8090:8090
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8090
@@ -71,27 +65,7 @@ services:
       context: .
       dockerfile: back_gestionDesNotes/Dockerfile
 
-  apigateway:
-    #container_name: napigateway
-    networks:
-      - mynetwork
-    image: ${DOCKER_REGISTRY-}apigateway
-    depends_on:
-      - nfront
-      - nback_patient 
-      - nback_note
-    build:
-      context: .
-      dockerfile: ApiGateway/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5010
-      - ASPNETCORE_HTTPS_PORTS=5011
-    ports:
-      - "5011:5011"
-
   nfront:
-    #container_name: nfront
     networks:
       - mynetwork
     depends_on:
@@ -104,4 +78,22 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - ASPNETCORE_HTTPS_PORTS=443
+
+  apigateway:
+    networks:
+      - mynetwork
+    image: ${DOCKER_REGISTRY-}apigateway
+    depends_on:
+      - nback_patient 
+      - nback_note
+      - nfront
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5010
+      - ASPNETCORE_HTTPS_PORTS=5011
+    ports:
+      - "5011:5011"
 

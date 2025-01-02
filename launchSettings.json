@@ -5,9 +5,9 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "nback_patient": "StartDebugging",
-        "nfront": "StartDebugging",
+        "nback_note": "StartDebugging",
         "apigateway": "StartDebugging",
-        "nback_note": "StartDebugging"
+        "nfront": "StartDebugging"
       }
     }
   }

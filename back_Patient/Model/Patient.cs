@@ -10,5 +10,4 @@ namespace back_Patient.Model
         public string? AdressePostale { get; set; }
         public string? Telephone { get; set; }
     }
-
 }

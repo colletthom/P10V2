@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace back_Patient.Controllers
 {
-   // [Authorize]
     [ApiController]
     [Route("API/[Controller]")]
     public class PatientController : ControllerBase
@@ -23,14 +22,9 @@ namespace back_Patient.Controllers
             _patientService = patientService;
         }
 
-        /// Checks if a cookie / key exists in the current HttpContext.
-        /// </summary>
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-        //    string cookie = Request.Cookies[".AspNetCore.Identity.Application"];
-
             var ListePatients = new List<Patient>();
             try
             {
