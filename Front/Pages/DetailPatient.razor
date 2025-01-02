@@ -6,6 +6,7 @@
 @using System.Text
 @using System.Collections
 @using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 @using VModel
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
@@ -100,12 +101,12 @@ else
     public PatientVM? patient;
     private string? errorMessage;
     public List<NoteVM>? notesDuPatient;
-    public string risqueDiabete="none";
+    public string risqueDiabete = "none";
 
     protected override async Task OnInitializedAsync()
     {
         try
-        {         
+        {
             using var handler = new HttpClientHandler();
             handler.ClientCertificateOptions = ClientCertificateOption.Manual;
             handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
@@ -117,27 +118,47 @@ else
             var patientId = int.Parse(id);
             patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
             notesDuPatient = await client.GetFromJsonAsync<List<NoteVM>>($"https://ApiGateway:5011/API/gestiondesnotes-back/{patientId}");
-           // calculRisqueDiabete(patient, notesDuPatient);
+            calculRisqueDiabete(patient, notesDuPatient);
         }
         catch (HttpRequestException ex)
         {
             errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message + "\n" + ex.StackTrace;
         }
     }
-    /*
-    private string calculRisqueDiabete(PatientVM patientVM, List<NoteVM> notesDuPatient)
+
+    private string calculRisqueDiabete(PatientVM patientVM, IList<NoteVM> notesDuPatient)
     {
         string risqueDiabete = "none";
-        bool isMoins30Ans = patientVM.DateNaissance.AddYears(30)>DateTime.Now;
+
+        bool isMoins30Ans = patientVM.DateNaissance.AddYears(30) > DateTime.Now;
         Char sexPatient = patientVM.Genre;
-        int nombreDeclencheurs = new int();
-        foreach (var note in notesDuPatient)
-        {
-            
-        }
+
+
+        int nombreDeclencheurs = CalculNombreDeclencheurs(notesDuPatient);
 
         return risqueDiabete;
-    }*/
+    }
+
+    private int CalculNombreDeclencheurs(IList<NoteVM> notesDuPatient)
+    {
+        int nombreDeclencheurs=0;
+        IList<Regex> facteursDeclencheur = new List<Regex>()
+        {
+            new Regex(@"H[éèe]moglobine A1C", RegexOptions.IgnoreCase),
+            new Regex(@"cholest[eéè]rol", RegexOptions.IgnoreCase)
+            //A finir
+        };
+
+        foreach (var regex in facteursDeclencheur)
+        {
+            bool isFacteurPresent = notesDuPatient.Any(note => regex.IsMatch(note.note));
+            if (isFacteurPresent)
+            {
+                nombreDeclencheurs++;
+            }
+        }
+        return nombreDeclencheurs;
+    }
 
     private async Task MiseAJourPatient()
     {
@@ -187,7 +208,7 @@ else
 
     public class PatientVMValidation
     {
-        private readonly PatientVM _patientVM; 
+        private readonly PatientVM _patientVM;
 
         public PatientVMValidation(PatientVM patientVM)
         {

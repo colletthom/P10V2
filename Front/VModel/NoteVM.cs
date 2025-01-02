@@ -13,6 +13,6 @@ namespace Front.VModel
         public string? patient { get; set; } = null!;
 
         [Display(Name = "Note")]
-        public string? note { get; set; } = null!;
+        public string note { get; set; } = null!;
     }
 }
