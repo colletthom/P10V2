@@ -48,11 +48,11 @@
             };
             using var client = new HttpClient(handler);
 
- 
+            string patIdToString = patId.ToString();
             var patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patId}");
             if (patient == null)
             {
-                NavigationManager.NavigateTo("/ListePatients");
+                NavigationManager.NavigateTo($"/UpdatePatient/{patIdToString}");
                 return;
             }
 
@@ -61,9 +61,9 @@
 
             var response = await client.PostAsJsonAsync<CreationNoteVM>($"https://ApiGateway:5011/API/gestiondesnotes-back/", newNote);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                NavigationManager.NavigateTo("/ListePatients");
+                NavigationManager.NavigateTo($"/UpdatePatient/{patIdToString}");
             }
             else
             {
