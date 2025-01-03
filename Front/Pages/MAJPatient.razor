@@ -1,5 +1,5 @@
-﻿@attribute [Authorize(Roles = "Praticien,SuperAdmin")]
-@page "/DetailPatient/{id}"
+﻿@attribute [Authorize]
+@page "/MAJPatient/{id}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Net
@@ -10,28 +10,10 @@
 @using VModel
 @inject Microsoft.AspNetCore.Components.NavigationManager NavigationManager
 
-<h3>Detail du patient</h3>
-<p>Le risque de diabète est: @risqueDiabete</p>
+<h3>Mise à jour des données personnelles du patient</h3>
 
 @if (patient != null)
 {
-    <h3>Notes sur le patient:</h3>
-    <div>
-        <table class="table">
-            <tbody class="no-border-table">
-                @foreach (var noteDuPatient in notesDuPatient)
-                {
-                    <tr>
-                        <td>@noteDuPatient.note</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <a href="@($"CreationNote/{patient.Id}")" class="btn btn-primary">Ajout d'une Note</a>
-    </div>
-    <p></p>
-    <p></p>
-    <h3>Mise à jour du patient:</h3>
     <table class="table">
         <thead>
             <tr>
@@ -103,8 +85,6 @@ else
 
     public PatientVM? patient;
     private string? errorMessage;
-    public List<NoteVM>? notesDuPatient;
-    public string risqueDiabete = "none";
 
     protected override async Task OnInitializedAsync()
     {
@@ -120,110 +100,11 @@ else
 
             var patientId = int.Parse(id);
             patient = await client.GetFromJsonAsync<PatientVM>($"https://ApiGateway:5011/API/patient-back/{patientId}");
-            notesDuPatient = await client.GetFromJsonAsync<List<NoteVM>>($"https://ApiGateway:5011/API/gestiondesnotes-back/{patientId}");
-            risqueDiabete = calculRisqueDiabete(patient, notesDuPatient);
         }
         catch (HttpRequestException ex)
         {
             errorMessage = "Une erreur s'est produite lors de la récupération des patients : " + ex.Message + "\n" + ex.StackTrace;
         }
-    }
-
-    private string calculRisqueDiabete(PatientVM patientVM, IList<NoteVM> notesDuPatient)
-    {
-        string risqueDiabete = "none";
-
-        bool isMoins30Ans = patientVM.DateNaissance.AddYears(30) > DateTime.Now;
-        Char sexePatient = char.ToLower(patientVM.Genre);
-
-
-        int nombreDeclencheurs = CalculNombreDeclencheurs(notesDuPatient);
-        risqueDiabete = CalculNombreDeclencheurs(isMoins30Ans, sexePatient, nombreDeclencheurs);
-        return risqueDiabete;
-    }
-
-    private string CalculNombreDeclencheurs(bool isMoins30Ans, Char sexePatient, int nombreDeclencheurs)
-    {
-        if (isMoins30Ans && sexePatient == 'm')
-        {
-            if (nombreDeclencheurs > 4)
-            {
-                return ("Early onset");
-            }
-            else if (nombreDeclencheurs > 2)
-            {
-                return ("In Danger");
-            }
-            else
-            {
-                return ("None");
-            }
-        }
-        else if (isMoins30Ans && sexePatient == 'f')
-        {
-            if (nombreDeclencheurs > 6)
-            {
-                return ("Early onset");
-            }
-            else if (nombreDeclencheurs > 3)
-            {
-                return ("In Danger");
-            }
-            else
-            {
-                return ("None");
-            }
-        }
-        else
-        {
-            if (nombreDeclencheurs > 7)
-            {
-                return ("Early onset");
-            }
-            else if(nombreDeclencheurs > 5)
-            {
-                return ("In Danger");
-            }
-            else if(nombreDeclencheurs > 1)
-            {
-                return ("Borderline");
-            }
-            else
-            {
-                return ("None");
-            }        
-        }
-    }
-
-    private int CalculNombreDeclencheurs(IList<NoteVM> notesDuPatient)
-    {
-        int nombreDeclencheurs = 0;
-        IList<Regex> facteursDeclencheur = new List<Regex>()
-        {
-            new Regex(@"H[éèe]moglobine A1C", RegexOptions.IgnoreCase),
-            new Regex(@"Microalbumine", RegexOptions.IgnoreCase),
-            new Regex(@"Taille", RegexOptions.IgnoreCase),
-            new Regex(@"Poids", RegexOptions.IgnoreCase),
-            new Regex(@"Fumeur", RegexOptions.IgnoreCase),
-            new Regex(@"Fumeuse", RegexOptions.IgnoreCase),
-            new Regex(@"Fumer", RegexOptions.IgnoreCase),
-            new Regex(@"Anormal", RegexOptions.IgnoreCase),
-            new Regex(@"cholest[eéè]rol", RegexOptions.IgnoreCase),
-            new Regex(@"Vertiges?", RegexOptions.IgnoreCase),
-            new Regex(@"Rechute", RegexOptions.IgnoreCase),
-            new Regex(@"R[éeè]action", RegexOptions.IgnoreCase),
-            new Regex(@"Anticorps", RegexOptions.IgnoreCase),
-        };
-
-        foreach (var regex in facteursDeclencheur)
-        {
-            bool isFacteurPresent = notesDuPatient.Any(note => regex.IsMatch(note.note));
-            if (isFacteurPresent)
-            {
-                nombreDeclencheurs++;
-            }
-        }
-        return nombreDeclencheurs;
     }
 
     private async Task MiseAJourPatient()
@@ -259,7 +140,7 @@ else
             {
                 // Mise à jour réussie
                 errorMessage = "Mise à jour réussie";
-                NavigationManager.NavigateTo($"DetailPatient/{patient.Id}");
+                NavigationManager.NavigateTo($"MAJPatient/{patient.Id}");
             }
             else
             {

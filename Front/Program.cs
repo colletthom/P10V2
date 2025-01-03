@@ -1,9 +1,9 @@
 using Front;
 using Front.Data;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-//await Task.Delay(500);
+using Microsoft.JSInterop;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+    
 
 var app = builder.Build();
 
@@ -44,5 +46,6 @@ app.UseAuthorization(); //nécessaire pour logout
 app.MapControllers();
 app.MapFallbackToPage("/_Host");
 app.MapBlazorHub();
+
 
 app.Run();
