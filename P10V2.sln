@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Front", "Front\Front.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "back_gestionDesNotes", "back_gestionDesNotes\back_gestionDesNotes.csproj", "{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiDetectionDiabete", "ApiDetectionDiabete\ApiDetectionDiabete.csproj", "{026C192A-C852-406B-91CC-F23486A3E063}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9E73E70-2EF3-4824-ADF9-8ED832767DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026C192A-C852-406B-91CC-F23486A3E063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026C192A-C852-406B-91CC-F23486A3E063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026C192A-C852-406B-91CC-F23486A3E063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026C192A-C852-406B-91CC-F23486A3E063}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

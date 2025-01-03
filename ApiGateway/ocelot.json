@@ -29,7 +29,7 @@
     // Front
     {
       "UpstreamPathTemplate": "/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete"],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 
       "downstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -39,6 +39,19 @@
         }
       ],
       "DownstreamPathTemplate": "/{everything}"
+    },
+    //detection-diabete-back
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/API/detection-diabete-back/{everything}",
+      "downstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "detection_diabete", // à remplacer par le nom de l'hote, à compléter à partir du fichier docker compose yaml
+          "Port": 8095
+        }
+      ],
+      "DownstreamPathTemplate": "/API/DetectionDiabete/{everything}"
     }
   ],
   "GlobalConfiguration": {

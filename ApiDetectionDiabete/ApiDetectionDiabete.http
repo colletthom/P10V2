@@ -1,0 +1,6 @@
+@ApiDetectionDiabete_HostAddress = http://localhost:5119
+
+GET {{ApiDetectionDiabete_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

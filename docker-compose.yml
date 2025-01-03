@@ -49,6 +49,23 @@ services:
       context: .
       dockerfile: back_Patient/Dockerfile
 
+  detection_diabete:
+    networks:
+      - mynetwork
+    depends_on:
+      - nback_patient
+      - nback_note
+    image: ${DOCKER_REGISTRY-}detectiondiabete
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8095
+      - ASPNETCORE_HTTPS_PORTS=8096
+    ports: 
+           - 8095:8095
+    build:
+      context: .
+      dockerfile: ApiDetectionDiabete/Dockerfile
+
   nback_note:
     networks:
       - mynetwork
@@ -86,6 +103,7 @@ services:
     depends_on:
       - nback_patient 
       - nback_note
+      - detection_diabete
       - nfront
     build:
       context: .

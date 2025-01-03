@@ -6,6 +6,7 @@
       "serviceActions": {
         "nback_patient": "StartDebugging",
         "nback_note": "StartDebugging",
+        "detection_diabete": "StartDebugging",
         "apigateway": "StartDebugging",
         "nfront": "StartDebugging"
       }
