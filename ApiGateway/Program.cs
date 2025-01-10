@@ -1,7 +1,7 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
-Thread.Sleep(1500);
+Thread.Sleep(4000);
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)

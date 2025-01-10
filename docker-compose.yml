@@ -60,8 +60,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8095
       - ASPNETCORE_HTTPS_PORTS=8096
-    ports: 
-           - 8095:8095
+  #  ports: 
+  #         - 8095:8095
     build:
       context: .
       dockerfile: ApiDetectionDiabete/Dockerfile
